@@ -54,6 +54,19 @@ reboot            # Reboot
 - **Password**: `1706`
 - **Session**: Select "Plasma (Wayland)" at login
 
+## ⚠️ Common Error Fix
+
+If you get `error: target not found: plasma-wayland-session`:
+
+```bash
+# Download the updated script (already fixed)
+curl -O https://raw.githubusercontent.com/michalkay-pixel/arch/main/install-arch.sh
+chmod +x install-arch.sh
+./install-arch.sh
+```
+
+The script has been fixed - Wayland session is included in the `plasma` package.
+
 ## 📚 Full Documentation
 
 See `INSTALLATION_REVIEW.md` for complete details and troubleshooting.
