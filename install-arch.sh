@@ -239,7 +239,6 @@ install_base() {
         nvidia-utils \
         nvidia-settings \
         plasma \
-        plasma-wayland-session \
         wayland \
         xorg-xwayland \
         sddm \
