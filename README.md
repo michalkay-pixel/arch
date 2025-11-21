@@ -52,10 +52,10 @@ Ensure your disk has the following partitions ready:
 
 ```bash
 # Download script
-curl -O https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install-arch.sh
+curl -O https://raw.githubusercontent.com/michalkay-pixel/arch/main/install-arch.sh
 
 # Or with wget
-wget https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO/main/install-arch.sh
+wget https://raw.githubusercontent.com/michalkay-pixel/arch/main/install-arch.sh
 
 # Make executable
 chmod +x install-arch.sh

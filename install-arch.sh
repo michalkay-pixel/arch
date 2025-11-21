@@ -174,11 +174,18 @@ format_partitions() {
     mkfs.ext4 -F "$HOME_PART"
     
     log "Formatting shared partition ($SHARED_PART) to NTFS..."
-    mkfs.ntfs -F "$SHARED_PART" || {
-        warn "mkfs.ntfs not available, using ntfs-3g format..."
-        # If ntfs-3g is available, we can format later or use existing
-        warn "Shared partition will be configured post-installation"
-    }
+    if command -v mkfs.ntfs &>/dev/null; then
+        mkfs.ntfs -F "$SHARED_PART"
+    else
+        warn "mkfs.ntfs not available in live environment"
+        warn "Checking if partition is already NTFS..."
+        if blkid -s TYPE -o value "$SHARED_PART" | grep -qi "ntfs"; then
+            warn "Partition is already NTFS - will use as-is"
+        else
+            error "Cannot format to NTFS. Install ntfs-3g and format manually after installation."
+            warn "You can continue, but shared partition will need manual setup"
+        fi
+    fi
     
     log "Partitions formatted successfully"
 }
@@ -259,10 +266,17 @@ generate_fstab() {
     genfstab -U /mnt >> /mnt/etc/fstab
     
     # Add shared partition to fstab
-    SHARED_UUID=$(blkid -s UUID -o value "$SHARED_PART")
-    echo "" >> /mnt/etc/fstab
-    echo "# Shared NTFS partition" >> /mnt/etc/fstab
-    echo "UUID=$SHARED_UUID /mnt/shared ntfs-3g defaults,uid=1000,gid=1000,umask=022 0 0" >> /mnt/etc/fstab
+    SHARED_UUID=$(blkid -s UUID -o value "$SHARED_PART" 2>/dev/null || echo "")
+    if [[ -n "$SHARED_UUID" ]]; then
+        echo "" >> /mnt/etc/fstab
+        echo "# Shared NTFS partition" >> /mnt/etc/fstab
+        echo "UUID=$SHARED_UUID /mnt/shared ntfs-3g defaults,uid=1000,gid=1000,umask=022 0 0" >> /mnt/etc/fstab
+        log "Shared partition added to fstab"
+    else
+        warn "Could not get UUID for shared partition - will need manual fstab entry"
+        warn "After installation, add to /etc/fstab:"
+        warn "  UUID=<UUID> /mnt/shared ntfs-3g defaults,uid=1000,gid=1000,umask=022 0 0"
+    fi
     
     log "Fstab generated"
 }
