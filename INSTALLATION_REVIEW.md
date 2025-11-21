@@ -93,7 +93,23 @@ SHARED partition: /dev/nvme0n1pX  (Check with lsblk - check which partition is 5
 
 ## ⚠️ Potential Issues & Solutions
 
-### Issue 1: NTFS Formatting May Fail
+### Issue 1: Package Installation Error - "plasma-wayland-session not found"
+
+**Problem**: Script fails with `error: target not found: plasma-wayland-session`
+
+**Solution**: This package doesn't exist. The Wayland session is included in the `plasma` package group.
+```bash
+# Download the updated script (already fixed):
+curl -O https://raw.githubusercontent.com/michalkay-pixel/arch/main/install-arch.sh
+chmod +x install-arch.sh
+./install-arch.sh
+
+# If partitions are already formatted, script will re-mount and continue
+```
+
+**Note**: The script has been fixed. The Wayland session is automatically available when `plasma` is installed.
+
+### Issue 2: NTFS Formatting May Fail
 
 **Problem**: `mkfs.ntfs` might not be available in live environment.
 
@@ -105,7 +121,7 @@ SHARED partition: /dev/nvme0n1pX  (Check with lsblk - check which partition is 5
 sudo mkfs.ntfs -F /dev/nvme0n1pX  # Replace X with your partition number
 ```
 
-### Issue 2: GRUB Doesn't Show Windows
+### Issue 3: GRUB Doesn't Show Windows
 
 **Problem**: os-prober might not detect Windows immediately.
 
@@ -114,7 +130,7 @@ sudo mkfs.ntfs -F /dev/nvme0n1pX  # Replace X with your partition number
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-### Issue 3: Wi-Fi Not Working After Boot
+### Issue 4: Wi-Fi Not Working After Boot
 
 **Problem**: NetworkManager might not start automatically.
 
@@ -124,7 +140,7 @@ sudo systemctl enable --now NetworkManager
 nmtui  # Or use GUI to connect
 ```
 
-### Issue 4: NVIDIA Graphics Issues
+### Issue 5: NVIDIA Graphics Issues
 
 **Problem**: Hybrid graphics might need additional configuration.
 
@@ -140,7 +156,7 @@ sudo mkinitcpio -P
 echo "WLR_NO_HARDWARE_CURSORS=1" | sudo tee -a /etc/environment.d/10-nvidia-wayland.conf
 ```
 
-### Issue 5: Shared Partition Not Mounting
+### Issue 6: Shared Partition Not Mounting
 
 **Problem**: NTFS partition might not auto-mount.
 

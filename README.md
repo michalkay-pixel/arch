@@ -132,6 +132,8 @@ reboot
 
 ### KDE Plasma Wayland Setup
 
+The Wayland session is automatically included when you install the `plasma` package group.
+
 1. At SDDM login screen, click on session type
 2. Select **"Plasma (Wayland)"**
 3. Login
@@ -141,6 +143,8 @@ Or run the setup script:
 ```bash
 ~/setup-kde.sh
 ```
+
+**Note**: If you don't see "Plasma (Wayland)" option, it means the `plasma` package wasn't fully installed. Re-run the installation script.
 
 ### Network Configuration
 
@@ -198,7 +202,7 @@ The 50GB NTFS shared partition will be mounted at `/mnt/shared` and accessible f
 - nvidia, nvidia-utils, nvidia-settings
 
 **Desktop:**
-- plasma, plasma-wayland-session, wayland, xorg-xwayland, sddm
+- plasma (includes Wayland session), wayland, xorg-xwayland, sddm
 
 **Audio:**
 - pipewire, pipewire-pulse, pipewire-alsa, pipewire-jack
@@ -250,6 +254,23 @@ sudo systemctl enable --now NetworkManager
 # Or use iwd directly
 iwctl
 ```
+
+### Package Installation Error: "plasma-wayland-session not found"
+
+**Error**: `error: target not found: plasma-wayland-session`
+
+**Solution**: This package doesn't exist as a standalone package. The Wayland session is included in the `plasma` package group.
+
+1. Download the updated script (already fixed):
+   ```bash
+   curl -O https://raw.githubusercontent.com/michalkay-pixel/arch/main/install-arch.sh
+   chmod +x install-arch.sh
+   ./install-arch.sh
+   ```
+
+2. If partitions are already formatted, the script will re-mount and continue.
+
+**Note**: The Wayland session is automatically available when `plasma` is installed. You'll see "Plasma (Wayland)" in the SDDM login screen.
 
 ### Can't Boot After Installation
 
